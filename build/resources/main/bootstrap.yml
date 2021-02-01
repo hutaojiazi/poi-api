@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: poi-demo
----
-spring:
-  profiles: default
-
-spring.profiles.active: dev
