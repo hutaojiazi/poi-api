@@ -1,5 +1,6 @@
 package com.store.demo.service;
 
+import com.store.demo.dto.LocationDto;
 import com.store.demo.model.Location;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,5 +42,5 @@ public interface LocationService
 	 * @param location
 	 * @return the id of the location created.
 	 */
-	String create(Location location);
+	String create(LocationDto location);
 }

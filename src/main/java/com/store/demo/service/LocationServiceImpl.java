@@ -1,9 +1,11 @@
 package com.store.demo.service;
 
+import com.store.demo.dto.LocationDto;
 import com.store.demo.model.Location;
 import com.store.demo.repository.LocationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +45,18 @@ public class LocationServiceImpl implements LocationService
 
 	@Override
 	@Transactional
-	public String create(Location location)
+	public String create(LocationDto dto)
 	{
-		return locationRepository.save(location).getId();
+		final Location entity = Location.builder()
+				.name(dto.getName())
+				.address(dto.getAddress())
+				.rating(dto.getRating())
+				.coords(new GeoJsonPoint(dto.getCoords()[0], dto.getCoords()[1]))
+				.facilities(dto.getFacilities())
+				.openingTimes(dto.getOpeningTimes())
+				.reviews(dto.getReviews())
+				.build();
+
+		return locationRepository.save(entity).getId();
 	}
 }

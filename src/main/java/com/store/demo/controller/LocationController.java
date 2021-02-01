@@ -1,5 +1,6 @@
 package com.store.demo.controller;
 
+import com.store.demo.dto.LocationDto;
 import com.store.demo.dto.PageableCollection;
 import com.store.demo.dto.ResourceIdDto;
 import com.store.demo.exception.ResourceNotFoundException;
@@ -60,7 +61,7 @@ public class LocationController extends AbstractController
 	}
 
 	@PostMapping
-	public ResponseEntity<ResourceIdDto> create(@RequestBody @Valid final Location dto)
+	public ResponseEntity<ResourceIdDto> create(@RequestBody @Valid final LocationDto dto)
 	{
 		final String id = locationService.create(dto);
 		return ResponseEntity.ok(ResourceIdDto.of(id));
