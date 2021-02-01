@@ -14,16 +14,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "product")
-public class Product
+public class LocationOpeningTime
 {
-	@Id
-	private String id;
+	@NotNull
+	private String days;
 
-	@NotNull(message = "Product name is required.")
-	private String name;
+	private String opening;
 
-	private Double price;
+	private String closing;
 
-	private String pictureUrl;
+	@NotNull
+	private Boolean closed;
 }

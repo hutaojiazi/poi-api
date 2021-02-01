@@ -1,27 +1,44 @@
-com/store/demo/POIApplication.java
- com.store.demo.POIApplication
+com/store/demo/model/LocationReview.java
+ com.store.demo.model.LocationReview
+ com.store.demo.model.LocationReview$LocationReviewBuilder
 com/store/demo/controller/AbstractController.java
  com.store.demo.controller.AbstractController
 com/store/demo/service/ProductServiceImpl.java
  com.store.demo.service.ProductServiceImpl
-com/store/demo/dto/ResourceIdDto.java
- com.store.demo.dto.ResourceIdDto
 com/store/demo/service/ProductService.java
  com.store.demo.service.ProductService
 com/store/demo/exception/ApiExceptionHandler.java
  com.store.demo.exception.ApiExceptionHandler
  com.store.demo.exception.ApiExceptionHandler$ErrorItem
  com.store.demo.exception.ApiExceptionHandler$ErrorResponse
-com/store/demo/controller/ProductController.java
- com.store.demo.controller.ProductController
+com/store/demo/model/Location.java
+ com.store.demo.model.Location
+ com.store.demo.model.Location$LocationBuilder
 com/store/demo/exception/ResourceNotFoundException.java
  com.store.demo.exception.ResourceNotFoundException
 com/store/demo/model/Product.java
  com.store.demo.model.Product
  com.store.demo.model.Product$ProductBuilder
+com/store/demo/model/LocationOpeningTime.java
+ com.store.demo.model.LocationOpeningTime
+ com.store.demo.model.LocationOpeningTime$LocationOpeningTimeBuilder
+com/store/demo/POIApplication.java
+ com.store.demo.POIApplication
+com/store/demo/dto/ResourceIdDto.java
+ com.store.demo.dto.ResourceIdDto
+com/store/demo/controller/ProductController.java
+ com.store.demo.controller.ProductController
 com/store/demo/repository/ProductRepository.java
  com.store.demo.repository.ProductRepository
 com/store/demo/dto/PageableCollection.java
  com.store.demo.dto.PageableCollection
  com.store.demo.dto.PageableCollection$PageMetaData
  com.store.demo.dto.PageableCollection$SortMetaData
+com/store/demo/repository/LocationRepository.java
+ com.store.demo.repository.LocationRepository
+com/store/demo/service/LocationService.java
+ com.store.demo.service.LocationService
+com/store/demo/controller/LocationController.java
+ com.store.demo.controller.LocationController
+com/store/demo/service/LocationServiceImpl.java
+ com.store.demo.service.LocationServiceImpl
