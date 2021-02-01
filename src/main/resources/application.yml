@@ -1,0 +1,13 @@
+spring:
+  profiles.active: dev
+  jackson:
+    default-property-inclusion: non_null
+    date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+    serialization:
+      indent_output: true
+      write_dates_as_timestamps: false
+      fail-on-empty-beans: false
+  data.mongodb:
+    uri: mongodb://user1:pwd1@localhost:27017/mydb?authSource=admin
+
+server.port: 8099

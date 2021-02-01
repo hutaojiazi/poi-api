@@ -1,0 +1,36 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.store'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation ('org.springframework.boot:spring-boot-starter-data-mongodb') {
+		exclude group: 'com.zaxxer', module: 'HikariCP'
+	}
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.hateoas:spring-hateoas'
+
+	implementation 'org.apache.commons:commons-collections4:4.4'
+
+	compileOnly("org.projectlombok:lombok")
+	testCompileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+	testAnnotationProcessor("org.projectlombok:lombok")
+
+	testImplementation("org.junit.vintage:junit-vintage-engine")
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+	useJUnitPlatform()
+}

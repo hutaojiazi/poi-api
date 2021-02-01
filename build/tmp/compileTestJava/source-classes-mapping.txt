@@ -1,0 +1,2 @@
+com/store/demo/POIApplicationTests.java
+ com.store.demo.POIApplicationTests

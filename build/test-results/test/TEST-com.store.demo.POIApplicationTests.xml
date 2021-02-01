@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.store.demo.POIApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-02-01T20:05:34" hostname="C02Z82RHLVDL" time="0.413">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.store.demo.POIApplicationTests" time="0.413"/>
+  <system-out><![CDATA[
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.4.2)
+
+15:05:32.557 [Test worker] INFO  com.store.demo.POIApplicationTests - Starting POIApplicationTests using Java 13.0.2 on C02Z82RHLVDL with PID 2459 (started by i514097 in /Users/i514097/exercise/poi-api)
+15:05:32.559 [Test worker] INFO  com.store.demo.POIApplicationTests - The following profiles are active: dev
+15:05:32.563 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.1.7.Final
+15:05:33.324 [Test worker] INFO  org.mongodb.driver.cluster - Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms'}
+15:05:33.377 [cluster-ClusterId{value='60185f0d7895181ea48aa819', description='null'}-localhost:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:1, serverValue:22}] to localhost:27017
+15:05:33.377 [cluster-rtt-ClusterId{value='60185f0d7895181ea48aa819', description='null'}-localhost:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:2, serverValue:21}] to localhost:27017
+15:05:33.378 [cluster-ClusterId{value='60185f0d7895181ea48aa819', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=15270748}
+15:05:34.245 [Test worker] INFO  com.store.demo.POIApplicationTests - Started POIApplicationTests in 2.115 seconds (JVM running for 3.054)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
