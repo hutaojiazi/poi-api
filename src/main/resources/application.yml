@@ -11,3 +11,7 @@ spring:
     uri: mongodb://user1:pwd1@localhost:27017/mydb?authSource=admin
 
 server.port: 8099
+
+encryption:
+  crypto-salt: 5a3cafb197c511a9
+  crypto-password: thisismysecret
