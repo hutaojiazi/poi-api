@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Validated
@@ -44,13 +45,13 @@ public class LocationController extends AbstractController
 	}
 
 	@GetMapping(value = "/nearby")
-	public HttpEntity<PageableCollection<Location>> getNearbyLocations(@RequestParam(name = "lat", required = true) double latitude,
+	public HttpEntity<List<Location>> getNearbyLocations(@RequestParam(name = "lat", required = true) double latitude,
 			@RequestParam(name = "lng", required = true) double longitude,
 			@RequestParam(name = "rad", required = false, defaultValue = "100000") int radius,
 			@PageableDefault(size = 20) Pageable pageable)
 	{
-		final Page<Location> locations = locationService.getNearBy(pageable, latitude, longitude, radius);
-		return ResponseEntity.ok(PageableCollection.of(locations));
+		final List<Location> locations = locationService.getNearBy(pageable, latitude, longitude, radius);
+		return ResponseEntity.ok(locations);
 	}
 
 	@GetMapping(value = "/{id}")

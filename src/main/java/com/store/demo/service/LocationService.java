@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Optional;
 
 @Validated
@@ -26,7 +27,7 @@ public interface LocationService
 	 * @param pageable the page request criteria.
 	 * @return the requested locations page
 	 */
-	Page<Location> getNearBy(Pageable pageable, double latitude, double longitude, int radius);
+	List<Location> getNearBy(Pageable pageable, double latitude, double longitude, int radius);
 
 	/**
 	 * Retrieves a location with provided id.

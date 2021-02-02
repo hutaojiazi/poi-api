@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,9 +32,9 @@ public class LocationServiceImpl implements LocationService
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<Location> getNearBy(final Pageable pageable, final double latitude, final double longitude, final int radius)
+	public List<Location> getNearBy(final Pageable pageable, final double latitude, final double longitude, final int radius)
 	{
-		return locationRepository.findAll(pageable);
+		return locationRepository.getNearbyLocations(latitude, longitude, radius);
 	}
 
 	@Override
