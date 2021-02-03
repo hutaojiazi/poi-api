@@ -24,7 +24,7 @@ public class User
 	private String name;
 
 	@NotNull
-	@Indexed
+	@Indexed(unique = true)
 	private String email;
 
 	private String hash;

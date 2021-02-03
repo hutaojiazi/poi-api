@@ -5,6 +5,7 @@ import com.store.demo.dto.PageableCollection;
 import com.store.demo.dto.ResourceIdDto;
 import com.store.demo.exception.ResourceNotFoundException;
 import com.store.demo.model.Location;
+import com.store.demo.model.LocationReview;
 import com.store.demo.service.LocationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,17 +48,33 @@ public class LocationController extends AbstractController
 	@GetMapping(value = "/nearby")
 	public HttpEntity<List<Location>> getNearbyLocations(@RequestParam(name = "lat", required = true) double latitude,
 			@RequestParam(name = "lng", required = true) double longitude,
-			@RequestParam(name = "rad", required = false, defaultValue = "100000") int radius,
+			@RequestParam(name = "maxDistance", required = false, defaultValue = "100000") int maxDistance,
 			@PageableDefault(size = 20) Pageable pageable)
 	{
-		final List<Location> locations = locationService.getNearBy(pageable, latitude, longitude, radius);
+		final List<Location> locations = locationService.getNearBy(pageable, latitude, longitude, maxDistance);
 		return ResponseEntity.ok(locations);
 	}
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<Location> get(@PathVariable final String id)
+	@GetMapping(value = "/{locationId}/reviews")
+	public ResponseEntity<List<LocationReview>> getLocationReviews(@PathVariable final String locationId,
+			@PageableDefault(size = 20) Pageable pageable)
 	{
-		final Optional<Location> dto = locationService.get(id);
+		final List<LocationReview> reviews = locationService.getLocationReviews(pageable, locationId);
+		return ResponseEntity.ok(reviews);
+	}
+
+	@PostMapping(value = "/{locationId}/reviews")
+	public ResponseEntity<ResourceIdDto> createLocationReview(@PathVariable final String locationId,
+			@RequestBody @Valid final LocationReview dto)
+	{
+		final String id = locationService.createLocationReview(dto, locationId);
+		return ResponseEntity.ok(ResourceIdDto.of(id));
+	}
+
+	@GetMapping(value = "/{locationId}/reviews/{id}")
+	public ResponseEntity<LocationReview> getLocationReviewById(@PathVariable final String locationId, @PathVariable final String id)
+	{
+		final Optional<LocationReview> dto = locationService.getLocationReviewById(locationId, id);
 		return dto.map(body -> ResponseEntity.ok().body(body)).orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 

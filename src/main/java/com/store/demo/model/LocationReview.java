@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -31,5 +31,5 @@ public class LocationReview
 	@NotNull
 	private String reviewText;
 
-	private OffsetDateTime createdOn = OffsetDateTime.now();
+	private LocalDateTime createdOn = LocalDateTime.now();
 }
