@@ -38,8 +38,9 @@ public class Location
 
 	private List<String> facilities;
 
-	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
-	private GeoJsonPoint coords;
+	//@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
+	//private GeoJsonPoint coords;
+	private double[] coords;
 
 	private List<LocationOpeningTime> openingTimes;
 
