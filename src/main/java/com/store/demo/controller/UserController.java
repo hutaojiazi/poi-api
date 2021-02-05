@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @Validated
 @RestController
@@ -34,9 +33,9 @@ public class UserController extends AbstractController
 	}
 
 	@PostMapping(value = "/validate")
-	public ResponseEntity<Map<String, Boolean>> validate(@RequestBody @Valid final UserDto dto)
+	public ResponseEntity<ResourceIdDto> validate(@RequestBody @Valid final UserDto dto)
 	{
-		final Boolean isValid = userService.validate(dto.getEmail(), dto.getPassword());
-		return ResponseEntity.ok(Map.of("isValid", isValid));
+		final String id = userService.validate(dto.getEmail(), dto.getPassword());
+		return ResponseEntity.ok(ResourceIdDto.of(id));
 	}
 }

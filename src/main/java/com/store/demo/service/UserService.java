@@ -11,9 +11,9 @@ public interface UserService
 	 *
 	 * @param email    the user email.
 	 * @param password the user password
-	 * @return true if the password is valid. otherwise return false.
+	 * @return the user id if user found using the email and password.
 	 */
-	Boolean validate(String email, String password);
+	String validate(String email, String password);
 
 	/**
 	 * Creates a new user.

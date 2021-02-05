@@ -24,15 +24,15 @@ public class UserServiceImpl implements UserService
 
 	@Override
 	@Transactional(readOnly = true)
-	public Boolean validate(final String email, final String password)
+	public String validate(final String email, final String password)
 	{
 		final User user = userRepository.findByEmail(email);
 		if (Objects.isNull(user))
 		{
-			return Boolean.FALSE;
+			return null;
 		}
 		final String dbPassword = credentialEncryptor.decrypt(user.getHash());
-		return StringUtils.equals(password, dbPassword);
+		return StringUtils.equals(password, dbPassword) ? user.getId() : null;
 	}
 
 	@Override
