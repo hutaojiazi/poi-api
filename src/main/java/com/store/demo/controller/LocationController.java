@@ -46,8 +46,8 @@ public class LocationController extends AbstractController
 	}
 
 	@GetMapping(value = "/nearby")
-	public HttpEntity<List<Location>> getNearbyLocations(@RequestParam(name = "lat", required = true) double latitude,
-			@RequestParam(name = "lng", required = true) double longitude,
+	public HttpEntity<List<Location>> getNearbyLocations(@RequestParam(name = "lat") double latitude,
+			@RequestParam(name = "lng") double longitude,
 			@RequestParam(name = "maxDistance", required = false, defaultValue = "100000") int maxDistance,
 			@PageableDefault(size = 20) Pageable pageable)
 	{
@@ -83,5 +83,12 @@ public class LocationController extends AbstractController
 	{
 		final String id = locationService.create(dto);
 		return ResponseEntity.ok(ResourceIdDto.of(id));
+	}
+
+	@GetMapping(value = "/{id}")
+	public HttpEntity<Location> getNearbyLocations(@PathVariable final String id)
+	{
+		final Optional<Location> dto = locationService.get(id);
+		return dto.map(body -> ResponseEntity.ok().body(body)).orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 }
