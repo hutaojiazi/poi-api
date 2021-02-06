@@ -64,11 +64,11 @@ public class LocationController extends AbstractController
 	}
 
 	@PostMapping(value = "/{locationId}/reviews")
-	public ResponseEntity<ResourceIdDto> createLocationReview(@PathVariable final String locationId,
+	public ResponseEntity<LocationReview> createLocationReview(@PathVariable final String locationId,
 			@RequestBody @Valid final LocationReview dto)
 	{
-		final String id = locationService.createLocationReview(dto, locationId);
-		return ResponseEntity.ok(ResourceIdDto.of(id));
+		final LocationReview review = locationService.createLocationReview(dto, locationId);
+		return ResponseEntity.ok(review);
 	}
 
 	@GetMapping(value = "/{locationId}/reviews/{id}")

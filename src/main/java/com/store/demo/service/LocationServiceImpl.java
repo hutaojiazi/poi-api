@@ -86,17 +86,16 @@ public class LocationServiceImpl implements LocationService
 
 	@Override
 	@Transactional
-	public String createLocationReview(final LocationReview dto, final String locationId)
+	public LocationReview createLocationReview(final LocationReview dto, final String locationId)
 	{
 		final Location location = locationRepository.findById(locationId).orElseThrow(() -> new ResourceNotFoundException(locationId));
 		final List<LocationReview> reviews = Optional.ofNullable(location.getReviews()).orElse(List.of());
 
-		final ObjectId id = new ObjectId();
-		dto.setId(id.toString());
+		dto.setId(new ObjectId().toString());
 		reviews.add(dto);
 		location.setReviews(reviews);
 		locationRepository.save(location);
 
-		return id.toString();
+		return dto;
 	}
 }

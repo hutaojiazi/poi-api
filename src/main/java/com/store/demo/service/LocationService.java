@@ -71,5 +71,5 @@ public interface LocationService
 	 * @param locationId
 	 * @return the id of the location review created.
 	 */
-	String createLocationReview(LocationReview review, String locationId);
+	LocationReview createLocationReview(LocationReview review, String locationId);
 }
