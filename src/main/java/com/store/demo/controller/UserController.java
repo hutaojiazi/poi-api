@@ -1,7 +1,7 @@
 package com.store.demo.controller;
 
-import com.store.demo.dto.ResourceIdDto;
 import com.store.demo.dto.UserDto;
+import com.store.demo.dto.UserResponseDto;
 import com.store.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,16 +26,16 @@ public class UserController extends AbstractController
 	}
 
 	@PostMapping
-	public ResponseEntity<ResourceIdDto> create(@RequestBody @Valid final UserDto dto)
+	public ResponseEntity<UserResponseDto> create(@RequestBody @Valid final UserDto dto)
 	{
-		final String id = userService.create(dto);
-		return ResponseEntity.ok(ResourceIdDto.of(id));
+		final UserResponseDto user = userService.create(dto);
+		return ResponseEntity.ok(user);
 	}
 
 	@PostMapping(value = "/validate")
-	public ResponseEntity<ResourceIdDto> validate(@RequestBody @Valid final UserDto dto)
+	public ResponseEntity<UserResponseDto> validate(@RequestBody @Valid final UserDto dto)
 	{
-		final String id = userService.validate(dto.getEmail(), dto.getPassword());
-		return ResponseEntity.ok(ResourceIdDto.of(id));
+		final UserResponseDto user = userService.validate(dto.getEmail(), dto.getPassword());
+		return ResponseEntity.ok(user);
 	}
 }

@@ -1,6 +1,7 @@
 package com.store.demo.service;
 
 import com.store.demo.dto.UserDto;
+import com.store.demo.dto.UserResponseDto;
 import com.store.demo.model.User;
 import com.store.demo.repository.UserRepository;
 import com.store.demo.service.encryptor.UserCredentialEncryptor;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService
 
 	@Override
 	@Transactional(readOnly = true)
-	public String validate(final String email, final String password)
+	public UserResponseDto validate(final String email, final String password)
 	{
 		final User user = userRepository.findByEmail(email);
 		if (Objects.isNull(user))
@@ -32,12 +33,17 @@ public class UserServiceImpl implements UserService
 			return null;
 		}
 		final String dbPassword = credentialEncryptor.decrypt(user.getHash());
-		return StringUtils.equals(password, dbPassword) ? user.getId() : null;
+		if (StringUtils.equals(password, dbPassword))
+		{
+			return UserResponseDto.builder().id(user.getId()).email(user.getEmail()).name(user.getName()).build();
+		}
+
+		return null;
 	}
 
 	@Override
 	@Transactional
-	public String create(UserDto dto)
+	public UserResponseDto create(UserDto dto)
 	{
 		final User entity = User.builder()
 				.name(dto.getName())
@@ -45,6 +51,7 @@ public class UserServiceImpl implements UserService
 				.hash(credentialEncryptor.encrypt(dto.getPassword()))
 				.build();
 
-		return userRepository.save(entity).getId();
+		final User savedEntity = userRepository.save(entity);
+		return UserResponseDto.builder().id(savedEntity.getId()).email(savedEntity.getEmail()).name(savedEntity.getName()).build();
 	}
 }
