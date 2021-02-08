@@ -47,7 +47,7 @@ public class MessageControllerIT
 
 	@Test
 	@Disabled
-	public void testCreateGameEndpoint() throws InterruptedException, ExecutionException, TimeoutException
+	public void testMessageEndpoint() throws InterruptedException, ExecutionException, TimeoutException
 	{
 		final WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
 		stompClient.setMessageConverter(new MappingJackson2MessageConverter());
