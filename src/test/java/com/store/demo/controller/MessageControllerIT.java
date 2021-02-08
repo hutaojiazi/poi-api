@@ -4,7 +4,6 @@ import com.store.demo.POIApplication;
 import com.store.demo.dto.messaging.Message;
 import com.store.demo.dto.messaging.OutputMessage;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = { POIApplication.class })
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = { POIApplication.class })
 public class MessageControllerIT
 {
 	private static final String SEND_CHAT_ENDPOINT = "/app/message";
@@ -48,7 +47,6 @@ public class MessageControllerIT
 	}
 
 	@Test
-	@Disabled
 	public void testMessageEndpoint() throws InterruptedException, ExecutionException, TimeoutException
 	{
 		final WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
@@ -71,7 +69,6 @@ public class MessageControllerIT
 	}
 
 	@Test
-	@Disabled
 	public void testUserMessageEndpoint() throws InterruptedException, ExecutionException, TimeoutException
 	{
 		final WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));

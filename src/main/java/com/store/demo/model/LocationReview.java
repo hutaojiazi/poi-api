@@ -31,5 +31,6 @@ public class LocationReview
 	@NotNull
 	private String reviewText;
 
+	@Builder.Default
 	private LocalDateTime createdOn = LocalDateTime.now();
 }
