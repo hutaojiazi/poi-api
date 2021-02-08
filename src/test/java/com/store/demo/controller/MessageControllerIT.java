@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
@@ -35,7 +36,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class MessageControllerIT
 {
 	private static final String SEND_CHAT_ENDPOINT = "/app/message";
+	private static final String SEND_CHAT_TO_USER_ENDPOINT = "/app/user-message";
 	private static final String SUBSCRIBE_MESSAGE_ENDPOINT = "/topic/messages";
+	private static final String SUBSCRIBE_USER_MESSAGE_ENDPOINT = "/user/queue/reply";
 
 	private CompletableFuture<OutputMessage> completableFuture;
 
@@ -66,7 +69,31 @@ public class MessageControllerIT
 		assertEquals(from, message.getFrom());
 		assertEquals(text, message.getText());
 		assertNotNull(message.getTime());
+	}
 
+	@Test
+	@Disabled
+	public void testUserMessageEndpoint() throws InterruptedException, ExecutionException, TimeoutException
+	{
+		final WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
+		stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+
+		final StompSession stompSession = stompClient.connect("ws://localhost:8099/chat", new StompSessionHandlerAdapter()
+		{
+		}).get(1, SECONDS);
+
+		final String from = "unknown";
+		final String to = "me";
+		final String text = "nice work.";
+
+		stompSession.subscribe(SUBSCRIBE_USER_MESSAGE_ENDPOINT, new CreateOutputMessageFrameHandler());
+		stompSession.send(SEND_CHAT_TO_USER_ENDPOINT, Message.builder().from(from).to(to).text(text).build());
+
+		final OutputMessage message = completableFuture.get(10, SECONDS);
+		assertEquals(from, message.getFrom());
+		assertEquals(to, message.getTo());
+		assertEquals(text, message.getText());
+		assertNotNull(message.getTime());
 	}
 
 	private List<Transport> createTransportClient()

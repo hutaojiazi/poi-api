@@ -8,5 +8,6 @@ import lombok.Getter;
 public class Message
 {
 	private String from;
+	private String to;
 	private String text;
 }
