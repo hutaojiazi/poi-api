@@ -30,8 +30,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @ExtendWith(SpringExtension.class)
@@ -83,9 +82,11 @@ class MessageControllerIT
 		stompSession1.send(SEND_CHAT_ENDPOINT, IncomingMessage.builder().from(from).text(text).build());
 
 		final OutputMessage message = completableFuture.get(2, SECONDS);
-		assertEquals(from, message.getFrom());
-		assertEquals(text, message.getText());
-		assertNotNull(message.getTime());
+		assertThat(message).isNotNull()
+				.returns(from, OutputMessage::getFrom)
+				.returns(text, OutputMessage::getText)
+				.extracting("time")
+				.isNotNull();
 	}
 
 	@Test
@@ -100,10 +101,12 @@ class MessageControllerIT
 		stompSession1.send(SEND_CHAT_TO_USER_ENDPOINT, IncomingMessage.builder().from(from).to(to).text(text).build());
 
 		final OutputMessage message = completableFuture.get(2, SECONDS);
-		assertEquals(from, message.getFrom());
-		assertEquals(to, message.getTo());
-		assertEquals(text, message.getText());
-		assertNotNull(message.getTime());
+		assertThat(message).isNotNull()
+				.returns(from, OutputMessage::getFrom)
+				.returns(to, OutputMessage::getTo)
+				.returns(text, OutputMessage::getText)
+				.extracting("time")
+				.isNotNull();
 	}
 
 	@Test
@@ -112,18 +115,14 @@ class MessageControllerIT
 		// subscribe first client
 		final BlockingQueue<OutputMessage> queue1 = new LinkedBlockingDeque<>();
 		final BlockingQueue<OutputMessage> userQueue1 = new LinkedBlockingDeque<>();
-		stompSession1.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_QUEUE,
-				new ClientFrameHandlerWithConsumer((payload) -> queue1.offer(payload)));
-		stompSession1.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_USER_REPLY,
-				new ClientFrameHandlerWithConsumer((payload) -> userQueue1.offer(payload)));
+		stompSession1.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_QUEUE, new ClientFrameHandlerWithConsumer(queue1::offer));
+		stompSession1.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_USER_REPLY, new ClientFrameHandlerWithConsumer(userQueue1::offer));
 
 		// subscribe second client
 		final BlockingQueue<OutputMessage> queue2 = new LinkedBlockingDeque<>();
 		final BlockingQueue<OutputMessage> userQueue2 = new LinkedBlockingDeque<>();
-		stompSession2.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_QUEUE,
-				new ClientFrameHandlerWithConsumer((payload) -> queue2.offer(payload)));
-		stompSession2.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_USER_REPLY,
-				new ClientFrameHandlerWithConsumer((payload) -> userQueue2.offer(payload)));
+		stompSession2.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_QUEUE, new ClientFrameHandlerWithConsumer(queue2::offer));
+		stompSession2.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_USER_REPLY, new ClientFrameHandlerWithConsumer(userQueue2::offer));
 
 		Thread.currentThread().sleep(100);
 
@@ -131,17 +130,56 @@ class MessageControllerIT
 		final String text = "hello team";
 		stompSession1.send(SEND_REGISTRATION_MSG_ENDPOINT, text);
 		Thread.currentThread().sleep(100);
-		assertEquals(MessagingConstants.DEFAULT_USER_REGISTRATION_REPLY_MESSAGE, userQueue1.poll().getText());
-		assertEquals(MessagingConstants.DEFAULT_USER_REGISTRATION_QUEUE_MESSAGE + text, queue1.poll().getText());
-		assertEquals(MessagingConstants.DEFAULT_USER_REGISTRATION_QUEUE_MESSAGE + text, queue2.poll().getText());
+		assertThat(userQueue1).hasSize(1);
+		assertThat(userQueue2).isEmpty();
+		assertThat(queue1).hasSize(1);
+		assertThat(queue2).hasSize(1);
+		final OutputMessage userMessage1 = userQueue1.poll();
+		assertThat(userMessage1).isNotNull()
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_MESSAGE_FROM, OutputMessage::getFrom)
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_REPLY_MESSAGE, OutputMessage::getText)
+				.extracting("time")
+				.isNotNull();
+		final OutputMessage queue1Message1 = queue1.poll();
+		final OutputMessage queue2Message1 = queue2.poll();
+		assertThat(queue1Message1).isNotNull()
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_MESSAGE_FROM, OutputMessage::getFrom)
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_QUEUE_MESSAGE + text, OutputMessage::getText)
+				.extracting("time")
+				.isNotNull();
+		assertThat(queue2Message1).isNotNull()
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_MESSAGE_FROM, OutputMessage::getFrom)
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_QUEUE_MESSAGE + text, OutputMessage::getText)
+				.extracting("time")
+				.isNotNull();
 
 		// call register endpoint for second client
 		final String anotherText = "hola";
 		stompSession2.send(SEND_REGISTRATION_MSG_ENDPOINT, anotherText);
 		Thread.currentThread().sleep(100);
-		assertEquals(MessagingConstants.DEFAULT_USER_REGISTRATION_REPLY_MESSAGE, userQueue2.poll().getText());
-		assertEquals(MessagingConstants.DEFAULT_USER_REGISTRATION_QUEUE_MESSAGE + anotherText, queue1.poll().getText());
-		assertEquals(MessagingConstants.DEFAULT_USER_REGISTRATION_QUEUE_MESSAGE + anotherText, queue2.poll().getText());
+		assertThat(userQueue1).isEmpty();
+		assertThat(userQueue2).hasSize(1);
+		assertThat(queue1).hasSize(1);
+		assertThat(queue2).hasSize(1);
+
+		final OutputMessage userMessage2 = userQueue2.poll();
+		assertThat(userMessage2).isNotNull()
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_MESSAGE_FROM, OutputMessage::getFrom)
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_REPLY_MESSAGE, OutputMessage::getText)
+				.extracting("time")
+				.isNotNull();
+		final OutputMessage queue1Message2 = queue1.poll();
+		final OutputMessage queue2Message2 = queue2.poll();
+		assertThat(queue1Message2).isNotNull()
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_MESSAGE_FROM, OutputMessage::getFrom)
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_QUEUE_MESSAGE + anotherText, OutputMessage::getText)
+				.extracting("time")
+				.isNotNull();
+		assertThat(queue2Message2).isNotNull()
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_MESSAGE_FROM, OutputMessage::getFrom)
+				.returns(MessagingConstants.DEFAULT_USER_REGISTRATION_QUEUE_MESSAGE + anotherText, OutputMessage::getText)
+				.extracting("time")
+				.isNotNull();
 	}
 
 	private WebSocketStompClient createWebSocketClient()
@@ -151,7 +189,7 @@ class MessageControllerIT
 		return stompClient;
 	}
 
-	private class ClientFrameHandlerWithCompletableFuture implements StompFrameHandler
+	private static class ClientFrameHandlerWithCompletableFuture implements StompFrameHandler
 	{
 		private final CompletableFuture<OutputMessage> frameHandler;
 
@@ -173,7 +211,7 @@ class MessageControllerIT
 		}
 	}
 
-	private class ClientFrameHandlerWithConsumer implements StompFrameHandler
+	private static class ClientFrameHandlerWithConsumer implements StompFrameHandler
 	{
 		private final Consumer<OutputMessage> frameHandler;
 
@@ -195,7 +233,7 @@ class MessageControllerIT
 		}
 	}
 
-	private class ClientSessionHandlerAdapter extends StompSessionHandlerAdapter
+	private static class ClientSessionHandlerAdapter extends StompSessionHandlerAdapter
 	{
 		@Override
 		public void afterConnected(final StompSession session, final StompHeaders connectedHeaders)
