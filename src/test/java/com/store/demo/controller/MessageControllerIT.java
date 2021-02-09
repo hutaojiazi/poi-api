@@ -26,6 +26,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
@@ -124,12 +125,12 @@ class MessageControllerIT
 		stompSession2.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_QUEUE, new ClientFrameHandlerWithConsumer(queue2::offer));
 		stompSession2.subscribe(SUBSCRIBE_REGISTRATION_MESSAGE_USER_REPLY, new ClientFrameHandlerWithConsumer(userQueue2::offer));
 
-		Thread.currentThread().sleep(100);
+		TimeUnit.MILLISECONDS.sleep(500);
 
 		// call register endpoint for first client
 		final String text = "hello team";
 		stompSession1.send(SEND_REGISTRATION_MSG_ENDPOINT, text);
-		Thread.currentThread().sleep(100);
+		TimeUnit.MILLISECONDS.sleep(500);
 		assertThat(userQueue1).hasSize(1);
 		assertThat(userQueue2).isEmpty();
 		assertThat(queue1).hasSize(1);
@@ -156,7 +157,7 @@ class MessageControllerIT
 		// call register endpoint for second client
 		final String anotherText = "hola";
 		stompSession2.send(SEND_REGISTRATION_MSG_ENDPOINT, anotherText);
-		Thread.currentThread().sleep(100);
+		TimeUnit.MILLISECONDS.sleep(500);
 		assertThat(userQueue1).isEmpty();
 		assertThat(userQueue2).hasSize(1);
 		assertThat(queue1).hasSize(1);
