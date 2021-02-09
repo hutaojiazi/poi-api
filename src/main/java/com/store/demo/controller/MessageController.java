@@ -1,8 +1,10 @@
 package com.store.demo.controller;
 
-import com.store.demo.dto.messaging.Message;
+import com.store.demo.config.WebSocketConfig;
+import com.store.demo.dto.messaging.IncomingMessage;
 import com.store.demo.dto.messaging.OutputMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -19,11 +21,11 @@ import java.util.Date;
 public class MessageController
 {
 	@Autowired
-	private SimpMessagingTemplate simpMessagingTemplate;
+	private SimpMessagingTemplate messagingTemplate;
 
 	@MessageMapping("/message")
 	@SendTo("/topic/messages")
-	public OutputMessage send(@Payload final Message msg, final Principal principal)
+	public OutputMessage send(@Payload final IncomingMessage msg, final Principal principal)
 	{
 		return OutputMessage.builder()
 				.from(msg.getFrom())
@@ -34,7 +36,7 @@ public class MessageController
 
 	@MessageMapping("/user-message")
 	@SendToUser("/queue/reply")
-	public OutputMessage sendToUser(@Payload Message msg, Principal user, @Header("simpSessionId") String sessionId)
+	public OutputMessage sendToUser(@Payload IncomingMessage msg, Principal user, @Header("simpSessionId") String sessionId)
 	{
 		final OutputMessage out = OutputMessage.builder()
 				.from(msg.getFrom())
@@ -43,6 +45,14 @@ public class MessageController
 				.time(new SimpleDateFormat("HH:mm").format(new Date()))
 				.build();
 		return out;
-		//simpMessagingTemplate.convertAndSendToUser(msg.getTo(), "/queue/reply", out);
+		//messagingTemplate.convertAndSendToUser(msg.getTo(), "/queue/reply", out);
+	}
+
+	@MessageMapping("/registration-message")
+	public void register(Message<Object> message, @Payload String payload, Principal principal)
+	{
+		messagingTemplate.convertAndSendToUser(principal.getName(), WebSocketConfig.SUBSCRIBE_USER_REPLY,
+				"Welcome to this wonderful world.");
+		messagingTemplate.convertAndSend(WebSocketConfig.SUBSCRIBE_QUEUE, "User " + principal.getName() + " registered: " + payload);
 	}
 }

@@ -1,7 +1,7 @@
 package com.store.demo.controller;
 
 import com.store.demo.POIApplication;
-import com.store.demo.dto.messaging.Message;
+import com.store.demo.dto.messaging.IncomingMessage;
 import com.store.demo.dto.messaging.OutputMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ public class MessageControllerIT
 		final String text = "well done.";
 
 		stompSession.subscribe(SUBSCRIBE_MESSAGE_ENDPOINT, new CreateOutputMessageFrameHandler());
-		stompSession.send(SEND_CHAT_ENDPOINT, Message.builder().from(from).text(text).build());
+		stompSession.send(SEND_CHAT_ENDPOINT, IncomingMessage.builder().from(from).text(text).build());
 
 		final OutputMessage message = completableFuture.get(10, SECONDS);
 		assertEquals(from, message.getFrom());
@@ -83,7 +83,7 @@ public class MessageControllerIT
 		final String text = "nice work.";
 
 		stompSession.subscribe(SUBSCRIBE_USER_MESSAGE_ENDPOINT, new CreateOutputMessageFrameHandler());
-		stompSession.send(SEND_CHAT_TO_USER_ENDPOINT, Message.builder().from(from).to(to).text(text).build());
+		stompSession.send(SEND_CHAT_TO_USER_ENDPOINT, IncomingMessage.builder().from(from).to(to).text(text).build());
 
 		final OutputMessage message = completableFuture.get(10, SECONDS);
 		assertEquals(from, message.getFrom());

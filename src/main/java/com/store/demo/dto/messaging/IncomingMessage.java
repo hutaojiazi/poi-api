@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class Message
+public class IncomingMessage
 {
 	private String from;
 	private String to;
