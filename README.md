@@ -2,7 +2,7 @@ Spring Boot - MongoDB - WebSocket Messaging
 
 ## Swagger
 
-http://localhost:8080/swagger-ui.html
+http://localhost:8099/swagger-ui.html
 
 ## Gradle
 
